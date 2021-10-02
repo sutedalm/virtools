@@ -8,6 +8,11 @@ function App() {
     window.handsfree.stop();
   }
 
+  const handPose = window.handsfree?.model?.handpose;
+  const threeScene = handPose?.three?.scene;
+  console.log(handPose);
+  console.log(threeScene);
+
   return (
     <div className="App">
       <header className="App-header">
