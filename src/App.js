@@ -4,6 +4,7 @@ import {
   LineDashedMaterial,
   AmbientLight,
 } from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { useEffect, useRef } from "react";
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
   console.log("handsfree", window.handsfree);
 
   const cubeRef = useRef();
+  const handAdapterRef = useRef();
 
   const handleHandsFreeData = (event) => {
     const data = event.detail;
@@ -29,6 +31,11 @@ function App() {
     if (!data.handpose || !cubeRef.current || !centerPalmObjPosition) return;
     cubeRef.current.position.copy(centerPalmObjPosition);
     cubeRef.current.rotation.copy(handBorder.rotation);
+
+    if (handAdapterRef.current) {
+      handAdapterRef.current.position.copy(centerPalmObjPosition);
+      handAdapterRef.current.rotation.copy(handBorder.rotation);
+    }
     // console.log(data);
   };
 
@@ -36,6 +43,20 @@ function App() {
     const threeScene = window.handsfree?.model?.handpose?.three?.scene;
     threeScene.add(new AmbientLight(0x404040));
     threeScene.add(cubeRef.current);
+    const loader = new GLTFLoader();
+
+    loader.load(
+      process.env.PUBLIC_URL + "/handAdapter.glb",
+      function (gltf) {
+        threeScene.add(gltf.scene);
+        handAdapterRef.current = gltf.scene;
+        // console.log("handadapter", handAdapterRef.current);
+      },
+      undefined,
+      function (error) {
+        console.error(error);
+      }
+    );
 
     // const handPose = window.handsfree?.model?.handpose;
     // const centerPalmObj = handPose?.three?.centerPalmObj;
