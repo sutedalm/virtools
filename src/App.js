@@ -1,4 +1,9 @@
-import { BoxBufferGeometry, Mesh, MeshBasicMaterial } from "three";
+import {
+  BoxBufferGeometry,
+  Mesh,
+  LineDashedMaterial,
+  AmbientLight,
+} from "three";
 import { useEffect, useRef } from "react";
 
 function App() {
@@ -19,24 +24,36 @@ function App() {
     const data = event.detail;
     const handPose = window.handsfree?.model?.handpose;
     const centerPalmObjPosition = handPose?.three?.centerPalmObj?.position;
-    console.log("CENTERPALM", centerPalmObjPosition);
+    const handBorder = handPose?.three?.meshes?.[17];
+    // console.log("CENTERPALM", centerPalmObjPosition);
     if (!data.handpose || !cubeRef.current || !centerPalmObjPosition) return;
-    cubeRef.current.position.set(
-      centerPalmObjPosition.x,
-      centerPalmObjPosition.y,
-      centerPalmObjPosition.z
-    );
+    cubeRef.current.position.copy(centerPalmObjPosition);
+    cubeRef.current.rotation.copy(handBorder.rotation);
     // console.log(data);
   };
 
-  const handleHandsFreeInit = (event) => {
+  const handleHandsFreeInit = () => {
     const threeScene = window.handsfree?.model?.handpose?.three?.scene;
+    threeScene.add(new AmbientLight(0x404040));
     threeScene.add(cubeRef.current);
+
+    // const handPose = window.handsfree?.model?.handpose;
+    // const centerPalmObj = handPose?.three?.centerPalmObj;
+    // const handBorder = handPose?.three?.meshes?.[17]; // threeScene.add(cubeRef.current);
+    // handBorder.add(cubeRef.current);
+    // console.log("scale", handBorder.scale);
+    // cubeRef.current.scale.z = 1.0 / handBorder.scale.z;
   };
 
   useEffect(() => {
-    const geometry = new BoxBufferGeometry(60, 60, 60);
-    const material = new MeshBasicMaterial();
+    const geometry = new BoxBufferGeometry(20, 20, 20);
+    const material = new LineDashedMaterial({
+      color: "grey",
+      linewidth: 1,
+      scale: 1,
+      dashSize: 3,
+      gapSize: 1,
+    });
     cubeRef.current = new Mesh(geometry, material);
   }, []);
 
