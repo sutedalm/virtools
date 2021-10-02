@@ -1,15 +1,11 @@
 import logo from './logo.svg';
 import './App.css';
 
-import Handsfree from 'handsfree'
-import 'handsfree/build/lib/assets/handsfree.css'
-
 function App() {
-  const handsfree = new Handsfree({handpose: true})
-  handsfree.enablePlugins('browser')
+  window.handsfree.enablePlugins('browser')
 
-  function startHandsfree () {handsfree.start()}
-  function stopHandsfree () {handsfree.stop()}
+  function startHandsfree () {window.handsfree.start()}
+  function stopHandsfree () {window.handsfree.stop()}
 
   return (
     <div className="App">
@@ -20,7 +16,6 @@ function App() {
           <button className="handsfree-show-when-loading">...loading...</button>
           <button className="handsfree-show-when-started" onClick={stopHandsfree}>Stop handsfree</button>
         </p>
-
       </header>
     </div>
   );
