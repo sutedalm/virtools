@@ -13,13 +13,27 @@ function App() {
 
   console.log("handsfree", window.handsfree);
 
-  const handPose = window.handsfree?.model?.handpose;
-  const threeScene = handPose?.three?.scene;
-  const indexFinger = handPose?.data?.landmarks?.[8];
-
-  console.log("handpose", handPose);
-
   const cubeRef = useRef();
+
+  const handleHandsFreeData = (event) => {
+    const data = event.detail;
+    const handPose = window.handsfree?.model?.handpose;
+    const centerPalmObjPosition = handPose?.three?.centerPalmObj?.position;
+    console.log("CENTERPALM", centerPalmObjPosition);
+    if (!data.handpose || !cubeRef.current || !centerPalmObjPosition) return;
+    cubeRef.current.position.set(
+      centerPalmObjPosition.x,
+      centerPalmObjPosition.y,
+      centerPalmObjPosition.z
+    );
+    // console.log(data);
+  };
+
+  const handleHandsFreeInit = (event) => {
+    const threeScene = window.handsfree?.model?.handpose?.three?.scene;
+    threeScene.add(cubeRef.current);
+  };
+
   useEffect(() => {
     const geometry = new BoxBufferGeometry(60, 60, 60);
     const material = new MeshBasicMaterial();
@@ -27,26 +41,26 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (indexFinger) {
-      console.log("Centered Palm object", indexFinger);
-      cubeRef.current.position.set(
-        indexFinger[0],
-        indexFinger[1],
-        indexFinger[3]
+    document.addEventListener("handsfree-data", handleHandsFreeData);
+
+    const threeScene = window.handsfree?.model?.handpose?.three?.scene;
+    if (threeScene) {
+      handleHandsFreeInit();
+    } else {
+      document.addEventListener(
+        "handsfree-handposeModelReady",
+        handleHandsFreeInit
       );
-
-      console.log("Cube position", cubeRef.current.position);
-      console.log("Cube", cubeRef.current);
-      console.log("Index finger position", indexFinger);
     }
-  }, [JSON.stringify(indexFinger)]);
 
-  useEffect(() => {
-    if (threeScene && cubeRef.current) {
-      console.log("ThreeScene", threeScene);
-      threeScene.add(cubeRef.current);
-    }
-  }, [threeScene, cubeRef.current]);
+    return () => {
+      document.removeEventListener("handsfree-data", handleHandsFreeData);
+      document.removeEventListener(
+        "handsfree-handposeModelReady",
+        handleHandsFreeInit
+      );
+    };
+  }, []);
 
   return (
     <div className="App">
