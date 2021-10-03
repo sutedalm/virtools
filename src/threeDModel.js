@@ -7,7 +7,7 @@ export default function ThreeDimModel({ ...props }) {
   const ref = useRef();
   return (
     <>
-      <Canvas camera={{position: [0,-180,300]}} backgr>
+      <Canvas camera={{position: [0,-120,180]}} backgr>
         <OrbitControls ref={ref} enableZoom={false} autoRotate autoRotateSpeed={0.25}/>
         <Environment preset="night" background/>
         <ambientLight color="#f5f5f5" intensity={0.2} />
