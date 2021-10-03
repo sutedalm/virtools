@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 
 import "./page.css"
 import "handsfree/build/lib/assets/handsfree.css";
-import App from "./App"
+import Handsfree from "./Handsfree"
 import ThreeDimModel from './threeDModel'
 
 function Page() {
@@ -21,7 +21,7 @@ function Page() {
         <h2>AR-Demo</h2>
         <div class="handsfree-container">
           <Suspense fallback={null}>
-            <App />
+            <Handsfree />
           </Suspense>
         </div>
       </div>
