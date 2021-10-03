@@ -1,9 +1,4 @@
-import {
-  BoxBufferGeometry,
-  Mesh,
-  LineDashedMaterial,
-  AmbientLight,
-} from "three";
+import { Plane, PlaneHelper, Vector3 } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { useEffect, useRef } from "react";
 
@@ -19,18 +14,50 @@ function App() {
 
   console.log("handsfree", window.handsfree);
 
-  const cubeRef = useRef();
+  // const cubeRef = useRef();
   const handAdapterRef = useRef();
+  const handPlaneRef = useRef();
 
   const handleHandsFreeData = (event) => {
     const data = event.detail;
     const handPose = window.handsfree?.model?.handpose;
     const centerPalmObjPosition = handPose?.three?.centerPalmObj?.position;
+
+    const handPoseDataAnnotations =
+      window.handsfree?.data?.handpose?.annotations;
+    // console.log("DATA", handPoseDataAnnotations);
+    const indexFingerPoint = handPoseDataAnnotations?.indexFinger?.[0];
+    const pinkyPoint = handPoseDataAnnotations?.pinky?.[0];
+    const palmBasePoint = handPoseDataAnnotations?.palmBase?.[0];
+    // console.log("points", indexFingerPoint, pinkyPoint, palmBasePoint);
+
     const handBorder = handPose?.three?.meshes?.[17];
     // console.log("CENTERPALM", centerPalmObjPosition);
-    if (!data.handpose || !cubeRef.current || !centerPalmObjPosition) return;
-    cubeRef.current.position.copy(centerPalmObjPosition);
-    cubeRef.current.rotation.copy(handBorder.rotation);
+    if (
+      !data.handpose ||
+      !handAdapterRef.current ||
+      !centerPalmObjPosition ||
+      !indexFingerPoint ||
+      !pinkyPoint ||
+      !palmBasePoint
+    )
+      return;
+
+    handPlaneRef.current.setFromCoplanarPoints(
+      new Vector3(...indexFingerPoint),
+      new Vector3(...pinkyPoint),
+      new Vector3(...palmBasePoint)
+    );
+    handPlaneRef.current.setFromNormalAndCoplanarPoint(
+      handPlaneRef.current.normal,
+      centerPalmObjPosition
+    );
+
+    handPlaneRef.current.normalize();
+
+    console.log("handplane", handPlaneRef.current);
+    // cubeRef.current.position.copy(centerPalmObjPosition);
+    // cubeRef.current.rotation.copy(handBorder.rotation);
 
     if (handAdapterRef.current) {
       handAdapterRef.current.position.copy(centerPalmObjPosition);
@@ -41,8 +68,13 @@ function App() {
 
   const handleHandsFreeInit = () => {
     const threeScene = window.handsfree?.model?.handpose?.three?.scene;
-    threeScene.add(new AmbientLight(0x404040));
-    threeScene.add(cubeRef.current);
+    // threeScene.add(new AmbientLight(0x404040));
+    // threeScene.add(cubeRef.current);
+    handPlaneRef.current = new Plane();
+    const planeHelper = new PlaneHelper(handPlaneRef.current, 50);
+
+    threeScene.add(planeHelper);
+
     const loader = new GLTFLoader();
 
     loader.load(
@@ -66,17 +98,17 @@ function App() {
     // cubeRef.current.scale.z = 1.0 / handBorder.scale.z;
   };
 
-  useEffect(() => {
-    const geometry = new BoxBufferGeometry(20, 20, 20);
-    const material = new LineDashedMaterial({
-      color: "grey",
-      linewidth: 1,
-      scale: 1,
-      dashSize: 3,
-      gapSize: 1,
-    });
-    cubeRef.current = new Mesh(geometry, material);
-  }, []);
+  // useEffect(() => {
+  //   const geometry = new BoxBufferGeometry(20, 20, 20);
+  //   const material = new LineDashedMaterial({
+  //     color: "grey",
+  //     linewidth: 1,
+  //     scale: 1,
+  //     dashSize: 3,
+  //     gapSize: 1,
+  //   });
+  //   cubeRef.current = new Mesh(geometry, material);
+  // }, []);
 
   useEffect(() => {
     document.addEventListener("handsfree-data", handleHandsFreeData);
