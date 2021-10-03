@@ -78,7 +78,7 @@ function App() {
     const loader = new GLTFLoader();
 
     loader.load(
-      process.env.PUBLIC_URL + "/handAdapter.glb",
+      process.env.PUBLIC_URL + "/devicev18.glb",
       function (gltf) {
         threeScene.add(gltf.scene);
         handAdapterRef.current = gltf.scene;
