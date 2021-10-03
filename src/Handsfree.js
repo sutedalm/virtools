@@ -1,9 +1,7 @@
-import { AxesHelper } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-export default function Handsfree({ ...props }) {
-
+export default function Handsfree() {
   window.handsfree.enablePlugins("browser");
 
   function startHandsfree() {
@@ -24,29 +22,10 @@ export default function Handsfree({ ...props }) {
     const centerPalmObjPosition = handPose?.three?.centerPalmObj?.position;
     if (!centerPalmObjPosition) return;
 
-    const handPoseDataAnnotations =
-      window.handsfree?.data?.handpose?.annotations;
-
     // Proceeding with the Finger calculations
-    const indexFingerPoint = handPoseDataAnnotations?.indexFinger?.[0];
-    const pinkyPoint = handPoseDataAnnotations?.pinky?.[0];
-    const palmBasePoint = handPoseDataAnnotations?.palmBase?.[0];
-    if (
-      !handAdapterRef.current ||
-      !indexFingerPoint ||
-      !pinkyPoint ||
-      !palmBasePoint
-    )
-      return;
+    if (!handAdapterRef.current) return;
 
     const handBorder = handPose?.three?.meshes?.[17];
-    const handBorderFront = handPose?.three?.meshes?.[9];
-
-    const axisHelperHandBorder = new AxesHelper(100);
-    handBorder.add(axisHelperHandBorder);
-
-    const axisHelperHandBorderFront = new AxesHelper(100);
-    handBorderFront.add(axisHelperHandBorderFront);
 
     if (handAdapterRef.current) {
       handAdapterRef.current.position.copy(centerPalmObjPosition);
