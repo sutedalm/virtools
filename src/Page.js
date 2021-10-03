@@ -10,46 +10,45 @@ function Page() {
   const [showHero, setShowHero] = useState(true);
   return (
     <>
-    <div className="content">
-      {showHero && (
-        <div className="interactive-model-container">
-          <div className="model-container">
-            <Suspense fallback={null}>
-              <ThreeDimModel />
-            </Suspense>
-          </div>
-          <h1 className="main-title">VIRTOOLS</h1>
-          <p>Space Apps Challenge - 2021</p>
-          <div className="homebutton-container">
-            <div className="handsfree-show-when-started">
-              <HomeButton
-                content="START AR DEMO"
-                onClick={() => {
-                  setShowHero(false);
-                  window.handsfree.showDebugger();
-                  window.handsfree.unpause();
-                }}
-              />
+      <div className="content">
+        {showHero && (
+          <div className="interactive-model-container">
+            <div className="model-container">
+              <Suspense fallback={null}>
+                <ThreeDimModel />
+              </Suspense>
             </div>
-            <div className="handsfree-show-when-loading">
-              <HomeButton content="LOADING..." />
-              <div className="loading-text-box">
-                <p>
-                  Loading the machine learning models might take up to 3
-                  minutes! Please allow access to you webcam, to access our
-                  demo!
-                </p>
+            <h1 className="main-title">VIRTOOLS</h1>
+            <p>Space Apps Challenge - 2021</p>
+            <div className="homebutton-container">
+              <div className="handsfree-show-when-started">
+                <HomeButton
+                  content="START AR DEMO"
+                  onClick={() => {
+                    setShowHero(false);
+                    window.handsfree.showDebugger();
+                    window.handsfree.unpause();
+                  }}
+                />
+              </div>
+              <div className="handsfree-show-when-loading">
+                <HomeButton content="LOADING..." />
+                <div className="loading-text-box">
+                  <p>
+                    Loading the machine learning models might take up to 3
+                    minutes! Please allow access to your webcam, to try out our
+                    demo!
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
-      <Suspense fallback={null}>
-        <Handsfree />
-      </Suspense>
-    </div>
-    {
-      !showHero && (
+        )}
+        <Suspense fallback={null}>
+          <Handsfree />
+        </Suspense>
+      </div>
+      {!showHero && (
         <HomeButton
           content="Exit AR DEMO"
           onClick={() => {
@@ -58,8 +57,7 @@ function Page() {
             window.handsfree.pause();
           }}
         />
-      )
-    }
+      )}
     </>
   );
 }
