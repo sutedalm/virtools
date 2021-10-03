@@ -1,15 +1,12 @@
-import { Mesh, Plane, PlaneHelper, Vector3, AxesHelper } from "three";
+import { AxesHelper } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { useEffect, useRef, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 
 export default function Handsfree({ ...props }) {
-
   const [active, setActive] = useState(false);
 
   const annotationsRef = useRef();
-
-  const [oldScale, setScale] = useState(1);
 
   window.handsfree.enablePlugins("browser");
 
@@ -42,7 +39,13 @@ export default function Handsfree({ ...props }) {
     const indexFingerPoint = handPoseDataAnnotations?.indexFinger?.[0];
     const pinkyPoint = handPoseDataAnnotations?.pinky?.[0];
     const palmBasePoint = handPoseDataAnnotations?.palmBase?.[0];
-    if (!handAdapterRef.current || !indexFingerPoint || !pinkyPoint || !palmBasePoint) return;
+    if (
+      !handAdapterRef.current ||
+      !indexFingerPoint ||
+      !pinkyPoint ||
+      !palmBasePoint
+    )
+      return;
 
     const handBorder = handPose?.three?.meshes?.[17];
     const handBorderFront = handPose?.three?.meshes?.[9];
@@ -92,12 +95,18 @@ export default function Handsfree({ ...props }) {
     if (threeScene) {
       handleHandsFreeInit();
     } else {
-      document.addEventListener("handsfree-handposeModelReady", handleHandsFreeInit);
+      document.addEventListener(
+        "handsfree-handposeModelReady",
+        handleHandsFreeInit
+      );
     }
 
     return () => {
       document.removeEventListener("handsfree-data", handleHandsFreeData);
-      document.removeEventListener("handsfree-handposeModelReady", handleHandsFreeInit);
+      document.removeEventListener(
+        "handsfree-handposeModelReady",
+        handleHandsFreeInit
+      );
     };
   }, []);
 
@@ -109,8 +118,12 @@ export default function Handsfree({ ...props }) {
           <button
             className="fancy-button handsfree-show-when-stopped handsfree-hide-when-loading"
             onClick={startHandsfree}
-          >🖐️ Start Live Demo</button>
-          <button className="fancy-button handsfree-show-when-loading">...loading...</button>
+          >
+            🖐️ Start Live Demo
+          </button>
+          <button className="fancy-button handsfree-show-when-loading">
+            ...loading...
+          </button>
           <button
             className="fancy-button handsfree-show-when-started"
             onClick={stopHandsfree}
@@ -119,21 +132,13 @@ export default function Handsfree({ ...props }) {
           </button>
         </p>
       </header>
-      {
-        active && annotationsRef.current && <Canvas>
-          {/**Handadapter Rendering */
-            <mesh></mesh>
-
-          }
-          {/**Rendering each Bone of the Hand */
-            
-          }
-
+      {active && annotationsRef.current && (
+        <Canvas>
+          {/**Handadapter Rendering */ <mesh></mesh>}
+          {/**Rendering each Bone of the Hand */}
         </Canvas>
-      }
-      <div>
-
-      </div>
+      )}
+      <div></div>
     </div>
   );
 }
