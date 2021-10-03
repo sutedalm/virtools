@@ -1,32 +1,32 @@
-import { Canvas } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei';
 import { Suspense } from 'react';
-import Device from "./Device"
+
 import "./page.css"
+import "handsfree/build/lib/assets/handsfree.css";
 import App from "./App"
+import ThreeDimModel from './threeDModel'
 
 function Page() {
   return (
-    <content>
-      <div class="header">
-        <h1>VirTools</h1>
-        <h2>Space Apps Challenge</h2>
-      </div>
-      <div class="canvas-container">
-        <Canvas camera={{position: [0,40,100]}}>
-        <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
-        <ambientLight color="#f5f5f5" intensity={0.3} />
-        <Suspense fallback={null}>
-            <directionalLight color="white" position={[0, 0, 5]} />
-            <Device />
+    <div className="content">
+      <div className="interactive-model-container">
+        <div className="model-container">
+          <Suspense fallback={null}>
+            <ThreeDimModel />
           </Suspense>
-        </Canvas>
+        </div>
+        <h1>VirTools</h1>
+        <p>Space Apps Challenge - 2021</p>
       </div>
-      < h1>AR-Demo</h1>
-      <div class="handsfree-container">
-        <App />
+      <div className="postHero">
+        <h2>AR-Demo</h2>
+        <div class="handsfree-container">
+          <Suspense fallback={null}>
+            <App />
+          </Suspense>
+        </div>
       </div>
-    </content>        
+    </div>        
   )
 }
+
 export default Page;

@@ -8,7 +8,7 @@ import "handsfree/build/lib/assets/handsfree.css";
 
 window.handsfree = new Handsfree({
   handpose: true,
-  showDebug: true,
+  showDebug: false,
 });
 
 ReactDOM.render(

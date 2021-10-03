@@ -31,8 +31,8 @@ export default function Device({ ...props }) {
         <mesh geometry={nodes.Distanzknopf_2.geometry} material={nodes.Distanzknopf_2.material} />
         <mesh geometry={nodes.Distanzknopf_3.geometry} material={nodes.Distanzknopf_3.material} />
       </group>
-      <pointLight intensity={1} decay={2} position={[0, 140.1, 44.6]} />
-      <pointLight intensity={1} decay={2} position={[-135.66, -242.97, -310.82]} />
+      <pointLight intensity={0} decay={2} position={[0, 140.1, 44.6]} />
+      <pointLight intensity={100} decay={2} position={[-135.66, -242.97, -310.82]} />
     </group>
   )
 }
