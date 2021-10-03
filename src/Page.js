@@ -9,6 +9,7 @@ import HomeButton from "./components/HomeButton/HomeButton";
 function Page() {
   const [showHero, setShowHero] = useState(true);
   return (
+    <>
     <div className="content">
       {showHero && (
         <div className="interactive-model-container">
@@ -40,6 +41,19 @@ function Page() {
         <Handsfree />
       </Suspense>
     </div>
+    {
+      !showHero && (
+        <HomeButton
+          content="Exit AR DEMO"
+          onClick={() => {
+            setShowHero(true);
+            window.handsfree.hideDebugger();
+            window.handsfree.pause();
+          }}
+        />
+      )
+    }
+    </>
   );
 }
 
