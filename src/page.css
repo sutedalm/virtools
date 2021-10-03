@@ -3,10 +3,9 @@
   width: 100%;
   margin: auto;
 
-  text-align:center;
-  font-family: 'Syncopate', sans-serif;
+  text-align: center;
 
-  background: linear-gradient(to bottom, #a4a4a5 0%,#37373a 100%);
+  background: linear-gradient(to bottom, #a4a4a5 0%, #37373a 100%);
 }
 
 .header-outer {
@@ -17,7 +16,7 @@
   color: white;
   align-items: center;
   text-align: center;
-  background: linear-gradient(to bottom, #2c4070 0%,#07173F 100%);
+  background: linear-gradient(to bottom, #2c4070 0%, #07173f 100%);
   padding-bottom: 20px;
 }
 
@@ -51,6 +50,11 @@ h4 {
 .interactive-model-container {
   width: 100%;
   text-align: center;
+
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
 }
 
 .interactive-model-container > * {
@@ -61,15 +65,15 @@ h4 {
   color: white;
 }
 
-
 .interactive-model-container > h1 {
   position: fixed;
   top: 1em;
   font-size: 9em;
   margin-top: 0.5em;
   margin-bottom: 0.1em;
-  font-weight:bold;
-  color: rgba(248, 251, 255, 0.9);
+  /* font-weight: normal; */
+  /* font-family: Sarpanch; */
+  color: rgba(248, 251, 255, 0.685);
 }
 
 .interactive-model-container > p {
@@ -116,11 +120,11 @@ h4 {
   padding: 0.8em 0.6em;
   font-size: 2em;
   text-decoration: none;
-  background: linear-gradient(to bottom, #5c709e 0%,#22376b 100%);
+  background: linear-gradient(to bottom, #5c709e 0%, #22376b 100%);
   border: none;
   color: white;
   border-radius: 1em;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, .2);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   user-select: none;
 }

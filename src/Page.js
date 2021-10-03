@@ -1,9 +1,10 @@
-import { Suspense } from 'react';
+import { Suspense } from "react";
 
-import "./page.css"
+import "./page.css";
 import "handsfree/build/lib/assets/handsfree.css";
-import Handsfree from "./Handsfree"
-import ThreeDimModel from './threeDModel'
+import Handsfree from "./Handsfree";
+import ThreeDimModel from "./threeDModel";
+import HomeButton from "./components/HomeButton/HomeButton";
 
 function Page() {
   return (
@@ -14,8 +15,9 @@ function Page() {
             <ThreeDimModel />
           </Suspense>
         </div>
-        <h1>VirTools</h1>
+        <h1 className="main-title">VIRTOOLS</h1>
         <p>Space Apps Challenge - 2021</p>
+        <HomeButton content="START AR DEMO" />
       </div>
       <div className="postHero">
         <h2>AR-Demo</h2>
@@ -25,8 +27,8 @@ function Page() {
           </Suspense>
         </div>
       </div>
-    </div>        
-  )
+    </div>
+  );
 }
 
 export default Page;
