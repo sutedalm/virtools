@@ -11,6 +11,11 @@ h1 {
 }
 
 .canvas-container {
-  height: 800px;
+  height: 200px;
+  width: 100%;
+}
+
+.handsfree-container {
+  height: 400px;
   width: 100%;
 }

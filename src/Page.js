@@ -3,6 +3,7 @@ import { OrbitControls } from '@react-three/drei';
 import { Suspense } from 'react';
 import Device from "./Device"
 import "./page.css"
+import App from "./App"
 
 function Page() {
   return (
@@ -20,6 +21,10 @@ function Page() {
             <Device />
           </Suspense>
         </Canvas>
+      </div>
+      < h1>AR-Demo</h1>
+      <div class="handsfree-container">
+        <App />
       </div>
     </content>        
   )
