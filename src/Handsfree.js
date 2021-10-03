@@ -4,13 +4,6 @@ import { useEffect, useRef } from "react";
 export default function Handsfree() {
   window.handsfree.enablePlugins("browser");
 
-  function startHandsfree() {
-    window.handsfree.start();
-  }
-  function stopHandsfree() {
-    window.handsfree.stop();
-  }
-
   const handAdapterRef = useRef();
 
   const handleHandsFreeData = (event) => {
@@ -79,28 +72,5 @@ export default function Handsfree() {
     };
   }, []);
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        {/* These classes are included by handsfree.css */}
-        <p>
-          <button
-            className="fancy-button handsfree-show-when-stopped handsfree-hide-when-loading"
-            onClick={startHandsfree}
-          >
-            🖐️ Start Live Demo
-          </button>
-          <button className="fancy-button handsfree-show-when-loading">
-            ...loading...
-          </button>
-          <button
-            className="fancy-button handsfree-show-when-started"
-            onClick={stopHandsfree}
-          >
-            Stop handsfree
-          </button>
-        </p>
-      </header>
-    </div>
-  );
+  return <></>;
 }

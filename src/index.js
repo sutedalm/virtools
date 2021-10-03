@@ -1,14 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import Page from "./Page"
+import Page from "./Page";
 
 import Handsfree from "handsfree";
 import "handsfree/build/lib/assets/handsfree.css";
 
 window.handsfree = new Handsfree({
   handpose: true,
-  showDebug: true,
+  showDebug: false,
+});
+
+window.handsfree.start(() => {
+  window.handsfree.pause();
 });
 
 ReactDOM.render(
