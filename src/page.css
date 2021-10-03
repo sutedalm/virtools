@@ -1,0 +1,16 @@
+content {
+  
+}
+.header {
+  text-align: center;
+}
+h1 {
+  font-size: 8em;
+  margin-top: 0.5em;
+  margin-bottom: 0.1em;
+}
+
+.canvas-container {
+  height: 200px;
+  width: 100%;
+}
