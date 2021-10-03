@@ -1,7 +1,9 @@
 import { Canvas } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei';
-
+import { Suspense } from 'react';
+import Device from "./Device"
 import "./page.css"
+
 function Page() {
   return (
     <content>
@@ -10,14 +12,13 @@ function Page() {
         <h2>Space Apps Challenge</h2>
       </div>
       <div class="canvas-container">
-        <Canvas>
+        <Canvas camera={{position: [0,40,100]}}>
         <OrbitControls enablePan={true} enableZoom={true} enableRotate={true} />
-          <mesh>
-            <ambientLight intensity={0.1} />
-            <directionalLight color="red" position={[0, 0, 5]} />
-          <boxGeometry args={[2,2,2]}/>
-          <meshStandardMaterial />
-          </mesh>
+        <ambientLight color="#f5f5f5" intensity={0.3} />
+        <Suspense fallback={null}>
+            <directionalLight color="white" position={[0, 0, 5]} />
+            <Device />
+          </Suspense>
         </Canvas>
       </div>
     </content>        
