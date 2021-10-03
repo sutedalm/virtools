@@ -19,31 +19,26 @@ function Page() {
           </div>
           <h1 className="main-title">VIRTOOLS</h1>
           <p>Space Apps Challenge - 2021</p>
-          {/* <div> */}
-          <HomeButton
-            content="START AR DEMO"
-            onClick={() => {
-              setShowHero(false);
-              window.handsfree.showDebugger();
-              window.handsfree.unpause();
-            }}
-          />
-          {/* </div> */}
+          <div className="homebutton-container">
+            <div className="handsfree-show-when-started">
+              <HomeButton
+                content="START AR DEMO"
+                onClick={() => {
+                  setShowHero(false);
+                  window.handsfree.showDebugger();
+                  window.handsfree.unpause();
+                }}
+              />
+            </div>
+            <div className="handsfree-show-when-loading">
+              <HomeButton content="LOADING..." />
+            </div>
+          </div>
         </div>
       )}
-
-      {/* <div class="postHero"> */}
       <Suspense fallback={null}>
         <Handsfree />
       </Suspense>
-      {/* </div> */}
-      {/* <div className="postHero">
-        <h2>AR-Demo</h2>
-        <div class="handsfree-container">
-          <Suspense fallback={null}>
-          </Suspense>
-        </div>
-      </div> */}
     </div>
   );
 }

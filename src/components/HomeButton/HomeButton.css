@@ -1,5 +1,5 @@
 .HomeButton__button {
-  top: 80vh;
+  /* top: 80vh; */
   font-size: 2em;
   /* padding: 5px 15px; */
   /* padding: 15 0px; */
@@ -11,4 +11,5 @@
 }
 .HomeButton__button p {
   margin: 20px 25px;
+  color: white;
 }
