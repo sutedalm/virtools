@@ -1,12 +1,8 @@
 import { AxesHelper } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { useEffect, useRef, useState } from "react";
-import { Canvas } from "@react-three/fiber";
 
 export default function Handsfree({ ...props }) {
-  const [active, setActive] = useState(false);
-
-  const annotationsRef = useRef();
 
   window.handsfree.enablePlugins("browser");
 
@@ -14,7 +10,6 @@ export default function Handsfree({ ...props }) {
     window.handsfree.start();
   }
   function stopHandsfree() {
-    setActive(false);
     window.handsfree.stop();
   }
 
@@ -31,9 +26,6 @@ export default function Handsfree({ ...props }) {
 
     const handPoseDataAnnotations =
       window.handsfree?.data?.handpose?.annotations;
-
-    // Update Hand Koordinates
-    annotationsRef.current = handPoseDataAnnotations;
 
     // Proceeding with the Finger calculations
     const indexFingerPoint = handPoseDataAnnotations?.indexFinger?.[0];
@@ -63,11 +55,9 @@ export default function Handsfree({ ...props }) {
       handAdapterRef.current.rotateX(-Math.PI / 2);
       handAdapterRef.current.rotateZ(Math.PI);
     }
-    console.log(annotationsRef);
   };
 
   const handleHandsFreeInit = () => {
-    setActive(true);
     const threeScene = window.handsfree?.model?.handpose?.three?.scene;
 
     const loader = new GLTFLoader();
@@ -132,13 +122,6 @@ export default function Handsfree({ ...props }) {
           </button>
         </p>
       </header>
-      {active && annotationsRef.current && (
-        <Canvas>
-          {/**Handadapter Rendering */ <mesh></mesh>}
-          {/**Rendering each Bone of the Hand */}
-        </Canvas>
-      )}
-      <div></div>
     </div>
   );
 }
