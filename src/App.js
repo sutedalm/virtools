@@ -1,8 +1,10 @@
-import { Plane, PlaneHelper, Vector3 } from "three";
+import { Mesh, Plane, PlaneHelper, Vector3, AxesHelper } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function App() {
+  const [oldScale, setScale] = useState(1);
+
   window.handsfree.enablePlugins("browser");
 
   function startHandsfree() {
@@ -13,10 +15,7 @@ function App() {
   }
 
   console.log("handsfree", window.handsfree);
-
-  // const cubeRef = useRef();
   const handAdapterRef = useRef();
-  const handPlaneRef = useRef();
 
   const handleHandsFreeData = (event) => {
     const data = event.detail;
@@ -25,14 +24,20 @@ function App() {
 
     const handPoseDataAnnotations =
       window.handsfree?.data?.handpose?.annotations;
-    // console.log("DATA", handPoseDataAnnotations);
     const indexFingerPoint = handPoseDataAnnotations?.indexFinger?.[0];
     const pinkyPoint = handPoseDataAnnotations?.pinky?.[0];
     const palmBasePoint = handPoseDataAnnotations?.palmBase?.[0];
-    // console.log("points", indexFingerPoint, pinkyPoint, palmBasePoint);
+    console.log("points", indexFingerPoint, pinkyPoint, palmBasePoint);
 
     const handBorder = handPose?.three?.meshes?.[17];
-    // console.log("CENTERPALM", centerPalmObjPosition);
+    const handBorderFront = handPose?.three?.meshes?.[9];
+
+    const axisHelperHandBorder = new AxesHelper(100);
+    handBorder.add(axisHelperHandBorder);
+
+    const axisHelperHandBorderFront = new AxesHelper(100);
+    handBorderFront.add(axisHelperHandBorderFront);
+
     if (
       !data.handpose ||
       !handAdapterRef.current ||
@@ -43,37 +48,17 @@ function App() {
     )
       return;
 
-    handPlaneRef.current.setFromCoplanarPoints(
-      new Vector3(...indexFingerPoint),
-      new Vector3(...pinkyPoint),
-      new Vector3(...palmBasePoint)
-    );
-    handPlaneRef.current.setFromNormalAndCoplanarPoint(
-      handPlaneRef.current.normal,
-      centerPalmObjPosition
-    );
-
-    handPlaneRef.current.normalize();
-
-    console.log("handplane", handPlaneRef.current);
-    // cubeRef.current.position.copy(centerPalmObjPosition);
-    // cubeRef.current.rotation.copy(handBorder.rotation);
-
     if (handAdapterRef.current) {
       handAdapterRef.current.position.copy(centerPalmObjPosition);
       handAdapterRef.current.rotation.copy(handBorder.rotation);
+
+      handAdapterRef.current.rotateX(-Math.PI / 2);
+      handAdapterRef.current.rotateZ(Math.PI);
     }
-    // console.log(data);
   };
 
   const handleHandsFreeInit = () => {
     const threeScene = window.handsfree?.model?.handpose?.three?.scene;
-    // threeScene.add(new AmbientLight(0x404040));
-    // threeScene.add(cubeRef.current);
-    handPlaneRef.current = new Plane();
-    const planeHelper = new PlaneHelper(handPlaneRef.current, 50);
-
-    threeScene.add(planeHelper);
 
     const loader = new GLTFLoader();
 
@@ -82,33 +67,17 @@ function App() {
       function (gltf) {
         threeScene.add(gltf.scene);
         handAdapterRef.current = gltf.scene;
-        // console.log("handadapter", handAdapterRef.current);
+        handAdapterRef.current.scale.set(1.5, 1.5, 1.5);
+
+        console.log("Adapter", handAdapterRef);
+        console.log("Model loaded.");
       },
       undefined,
       function (error) {
         console.error(error);
       }
     );
-
-    // const handPose = window.handsfree?.model?.handpose;
-    // const centerPalmObj = handPose?.three?.centerPalmObj;
-    // const handBorder = handPose?.three?.meshes?.[17]; // threeScene.add(cubeRef.current);
-    // handBorder.add(cubeRef.current);
-    // console.log("scale", handBorder.scale);
-    // cubeRef.current.scale.z = 1.0 / handBorder.scale.z;
   };
-
-  // useEffect(() => {
-  //   const geometry = new BoxBufferGeometry(20, 20, 20);
-  //   const material = new LineDashedMaterial({
-  //     color: "grey",
-  //     linewidth: 1,
-  //     scale: 1,
-  //     dashSize: 3,
-  //     gapSize: 1,
-  //   });
-  //   cubeRef.current = new Mesh(geometry, material);
-  // }, []);
 
   useEffect(() => {
     document.addEventListener("handsfree-data", handleHandsFreeData);
