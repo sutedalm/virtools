@@ -1,8 +1,10 @@
-import { Plane, PlaneHelper, Vector3 } from "three";
+import { Mesh, Plane, PlaneHelper, Vector3 } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function App() {
+  const [oldScale, setScale] = useState(1);
+
   window.handsfree.enablePlugins("browser");
 
   function startHandsfree() {
@@ -17,6 +19,7 @@ function App() {
   // const cubeRef = useRef();
   const handAdapterRef = useRef();
   const handPlaneRef = useRef();
+  const handPlaneHelperRef = useRef();
 
   const handleHandsFreeData = (event) => {
     const data = event.detail;
@@ -29,9 +32,11 @@ function App() {
     const indexFingerPoint = handPoseDataAnnotations?.indexFinger?.[0];
     const pinkyPoint = handPoseDataAnnotations?.pinky?.[0];
     const palmBasePoint = handPoseDataAnnotations?.palmBase?.[0];
-    // console.log("points", indexFingerPoint, pinkyPoint, palmBasePoint);
+    console.log("points", indexFingerPoint, pinkyPoint, palmBasePoint);
 
     const handBorder = handPose?.three?.meshes?.[17];
+    const handBorderRight = handPose?.three?.meshes?.[2];
+
     // console.log("CENTERPALM", centerPalmObjPosition);
     if (
       !data.handpose ||
@@ -48,22 +53,57 @@ function App() {
       new Vector3(...pinkyPoint),
       new Vector3(...palmBasePoint)
     );
+
+    const handRight = new Vector3(
+      handBorderRight.position.x,
+      handBorderRight.position.y,
+      handBorderRight.position.z
+    );
+
+    const handLeft = new Vector3(
+      handBorder.position.x,
+      handBorder.position.y,
+      handBorder.position.z
+    );
+
+    console.log("Left hand", handLeft);
+    console.log("Right hand", handRight);
+
+    const newScale = handRight.distanceTo(handLeft);
+    console.log("new Scale", newScale);
+
     handPlaneRef.current.setFromNormalAndCoplanarPoint(
       handPlaneRef.current.normal,
       centerPalmObjPosition
     );
 
-    handPlaneRef.current.normalize();
-
-    console.log("handplane", handPlaneRef.current);
     // cubeRef.current.position.copy(centerPalmObjPosition);
     // cubeRef.current.rotation.copy(handBorder.rotation);
 
     if (handAdapterRef.current) {
       handAdapterRef.current.position.copy(centerPalmObjPosition);
       handAdapterRef.current.rotation.copy(handBorder.rotation);
+
+      const changeFactor = oldScale / newScale;
+      console.log("change factor", changeFactor);
+
+      const currentScale = handAdapterRef.current.scale;
+      console.log("current scale", currentScale);
+      if (currentScale.x == NaN) {
+        handAdapterRef.current.scale.set(1, 1, 1);
+        currentScale = handAdapterRef.current.scale;
+      }
+
+      const finalScaleValue = currentScale * changeFactor;
+      handAdapterRef.current.scale.set(
+        finalScaleValue,
+        finalScaleValue,
+        finalScaleValue
+      );
     }
-    // console.log(data);
+
+    setScale(newScale);
+    console.log("Adapter", handAdapterRef);
   };
 
   const handleHandsFreeInit = () => {
@@ -71,9 +111,9 @@ function App() {
     // threeScene.add(new AmbientLight(0x404040));
     // threeScene.add(cubeRef.current);
     handPlaneRef.current = new Plane();
-    const planeHelper = new PlaneHelper(handPlaneRef.current, 50);
+    handPlaneHelperRef.current = new PlaneHelper(handPlaneRef.current, 50);
 
-    threeScene.add(planeHelper);
+    threeScene.add(handPlaneHelperRef.current);
 
     const loader = new GLTFLoader();
 
@@ -82,6 +122,9 @@ function App() {
       function (gltf) {
         threeScene.add(gltf.scene);
         handAdapterRef.current = gltf.scene;
+        handAdapterRef.current.scale.set(1, 1, 1);
+        console.log("Adapter", handAdapterRef);
+        console.log("Model loaded.");
         // console.log("handadapter", handAdapterRef.current);
       },
       undefined,
@@ -89,7 +132,6 @@ function App() {
         console.error(error);
       }
     );
-
     // const handPose = window.handsfree?.model?.handpose;
     // const centerPalmObj = handPose?.three?.centerPalmObj;
     // const handBorder = handPose?.three?.meshes?.[17]; // threeScene.add(cubeRef.current);
