@@ -1,5 +1,13 @@
 .homebutton-container {
-  top: 80vh;
+  top: 70vh;
+}
+
+.loading-text-box {
+  background: rgba(54, 54, 54, 0.39);
+  padding: 5px;
+  font-size: 1em;
+  color: white;
+  margin-top: 10px;
 }
 
 .content {

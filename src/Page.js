@@ -32,6 +32,13 @@ function Page() {
             </div>
             <div className="handsfree-show-when-loading">
               <HomeButton content="LOADING..." />
+              <div className="loading-text-box">
+                <p>
+                  Loading the machine learning models might take up to 3
+                  minutes! Please allow access to you webcam, to access our
+                  demo!
+                </p>
+              </div>
             </div>
           </div>
         </div>
